@@ -77,3 +77,69 @@ func TestPeopleSwap(t *testing.T) {
 
 	ass.Equal(false, p.Less(0, 1))
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func TestMatrixNew(t *testing.T) {
+	ass := assert.New(t)
+
+	m1, _ := New("")
+
+	ass.Equal(m1, (*Matrix)(nil))
+
+	m2, _ := New("\n")
+
+	ass.Equal(m2, (*Matrix)(nil))
+
+	m3, _ := New("1 2\n1")
+
+	ass.Equal(m3, (*Matrix)(nil))
+
+	_, err1 := New("1")
+
+	ass.Equal(err1, nil)
+
+	_, err2 := New("1 2 3\n1 2 3")
+
+	ass.Equal(err2, nil)
+}
+
+func TestMatrixRowsCols(t *testing.T) {
+	ass := assert.New(t)
+
+	m, err := New("1 2")
+
+	ass.Equal(err, nil)
+
+	cols := m.Cols()
+
+	ass.Equal(true, cols[0][0] == 1 && cols[1][0] == 2 && len(cols) == 2 && len(cols[0]) == 1 && len(cols[1]) == 1)
+
+	rows := m.Rows()
+
+	ass.Equal(true, rows[0][0] == 1 && rows[0][1] == 2 && len(rows) == 1 && len(rows[0]) == 2)
+}
+
+func TestMatrixSet(t *testing.T) {
+	ass := assert.New(t)
+
+	m, err := New("0")
+
+	ass.Equal(err, nil)
+
+	ass.Equal(false, m.Set(-1, -1, 1))
+
+	ass.Equal(false, m.Set(-1, 0, 1))
+
+	ass.Equal(false, m.Set(0, -1, 1))
+
+	ass.Equal(false, m.Set(1, 1, 1))
+
+	ass.Equal(false, m.Set(1, 0, 1))
+
+	ass.Equal(false, m.Set(1, 1, 1))
+
+	ass.Equal(true, m.Set(0, 0, 1))
+
+	ass.Equal(1, m.data[0])
+}
